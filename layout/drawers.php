@@ -27,6 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/behat/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 
+global $CFG;
+
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
 
@@ -91,10 +93,13 @@ if ($logocentre) {
     $fs = get_file_storage();
     $files = $fs->get_area_files($context->id, 'theme_xtecboost', 'logo', 0, 'itemid, filepath, filename', false);
     foreach ($files as $file) {
-        $logocentre = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+        $logocentre = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), 
+            $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
     }
 } else {
-    $logocentre = "http://campus.agora.cat/moodle42/theme/xtecboost/pix/top_eix_color.png";
+    $xtec_type = get_config('theme_xtecboost', 'xtec_type');
+    $png_image = 'top_'.$xtec_type.'_color.png';
+    $logocentre = $CFG->wwwroot."/theme/xtecboost/pix/".$png_image;
 }
 
 $templatecontext = [
@@ -117,7 +122,7 @@ $templatecontext = [
     'overflow' => $overflow,
     'headercontent' => $headercontent,
     'addblockbutton' => $addblockbutton,
-    'logodepartamenteducacio' => 'http://campus.agora.cat/moodle42/theme/xtecboost/pix/departament.png' ,//$CFG->logoEducacio
+    'logodepartamenteducacio' => $CFG->wwwroot.'/theme/xtecboost/pix/departament.png' ,
     'logocentre' =>  $logocentre
 ];
 

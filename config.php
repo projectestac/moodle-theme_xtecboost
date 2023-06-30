@@ -27,6 +27,13 @@ defined('MOODLE_INTERNAL') || die();
 $THEME->name = 'xtecboost';
 $THEME->sheets = [];
 $THEME->editor_sheets = [];
+$THEME->parents = ['boost'];
+$THEME->rendererfactory = 'theme_overridden_renderer_factory';
+$THEME->extrascsscallback = 'theme_xtecboost_get_extra_scss';
+$THEME->prescsscallback = 'theme_xtecboost_get_pre_scss';
+$THEME->precompiledcsscallback = 'theme_xtecboost_get_precompiled_css';
+$THEME->requiredblocks = ''; // Allow removal of block 'Navigation' and 'settings'
+$THEME->yuicssmodules = [];
 $THEME->usefallback = true;
 $THEME->scss = function($theme) {
     return theme_xtecboost_get_main_scss_content($theme);
