@@ -25,7 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'theme_xtecboost';
-$plugin->version = 2023061411;
-$plugin->requires = 2023041800;
+$plugin->version = 2023070300;
+$plugin->requires = 2022112800;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('theme_boost' => 2023042400);
+$plugin->dependencies = [
+    'theme_boost' => 2022112800
+];

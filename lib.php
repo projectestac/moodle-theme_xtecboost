@@ -15,20 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Moodle's Clean theme, an example of how to make a Bootstrap theme
- *
- * DO NOT MODIFY THIS THEME!
- * COPY IT FIRST, THEN RENAME THE COPY AND MODIFY IT INSTEAD.
- *
- * For full information about creating Moodle themes, see:
- * http://docs.moodle.org/dev/Themes_2.0
- *
  * @package   theme_xtecboost
  * @copyright 2013 Moodle, moodle.org
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function theme_xtecboost_clean_cache(){
+function theme_xtecboost_clean_cache(): void {
     $cache = cache::make('core', 'htmlpurifier');
     $cache->delete('social_icons', true);
     $cache->delete('agora_alerts', true);
@@ -40,9 +32,8 @@ function theme_xtecboost_clean_cache(){
  * @param theme_config $theme The theme config object.
  * @return string
  */
-function theme_xtecboost_get_main_scss_content($theme) {
+function theme_xtecboost_get_main_scss_content(): string {
     global $CFG;
-
     return file_get_contents($CFG->dirroot . '/theme/xtecboost/scss/default.scss');
 }
 
@@ -52,7 +43,7 @@ function theme_xtecboost_get_main_scss_content($theme) {
  * @param theme_config $theme The theme config object.
  * @return string
  */
-function theme_xtecboost_get_extra_scss($theme) {
+function theme_xtecboost_get_extra_scss($theme): string {
     $content = '';
     $imageurl = $theme->setting_file_url('logo', 'logo');
 
@@ -70,7 +61,7 @@ function theme_xtecboost_get_extra_scss($theme) {
  *
  * @return string compiled css
  */
-function theme_xtecboost_get_precompiled_css() {
+function theme_xtecboost_get_precompiled_css(): string {
     global $CFG;
     return file_get_contents($CFG->dirroot . '/theme/xtecboost/style/custom.css');
 }
@@ -81,9 +72,7 @@ function theme_xtecboost_get_precompiled_css() {
  * @param theme_config $theme The theme config object.
  * @return array
  */
-function theme_xtecboost_get_pre_scss($theme) {
-    global $CFG;
-
+function theme_xtecboost_get_pre_scss($theme): array|string {
     $scss = '';
     $configurable = [
         // Config key => [variableName, ...].
@@ -100,8 +89,8 @@ function theme_xtecboost_get_pre_scss($theme) {
     $theme->settings->fontcolor = !empty($theme->settings->fontcolor) ? $theme->settings->fontcolor : '#007377';
     $theme->settings->linkscolor = !empty($theme->settings->linkscolor) ? $theme->settings->linkscolor : '#910048';
     $theme->settings->headerbg = !empty($theme->settings->headerbg) ? $theme->settings->headerbg : '#F8F8F8';
-    if (!empty($theme->settings->colorset) && $theme->settings->colorset == 'nodes' &&
-        theme_xtecboost_is_service_enabled('nodes')) {
+
+    if (!empty($theme->settings->colorset) && $theme->settings->colorset === 'nodes' && theme_xtecboost_is_service_enabled('nodes')) {
         $colors = get_colors_from_nodes(true);
         if ($colors) {
             $theme->settings->maincolor = $colors['color'];
@@ -135,16 +124,15 @@ function theme_xtecboost_get_pre_scss($theme) {
             break;
     }
 
-
     // Prepend variables first.
     foreach ($configurable as $configkey => $targets) {
-        $value = isset($theme->settings->{$configkey}) ? $theme->settings->{$configkey} : null;
+        $value = $theme->settings->{$configkey} ?? null;
         if (empty($value)) {
             continue;
         }
-        array_map(function($target) use (&$scss, $value) {
+        array_map(static function ($target) use (&$scss, $value) {
             $scss .= '$' . $target . ': ' . $value . ";\n";
-        }, (array) $targets);
+        }, $targets);
     }
 
     if (!empty($theme->settings->fontsize)) {
@@ -160,19 +148,19 @@ function theme_xtecboost_get_pre_scss($theme) {
 }
 
 // Returns if black or white is the color with more contrast over the hexcolor using the YIQ equation
-function theme_xtecboost_get_contrast_YIQ($hexcolor){
+function theme_xtecboost_get_contrast_YIQ($hexcolor): string {
     $yiq = theme_xtecboost_get_YIQ($hexcolor);
     return ($yiq >= 128) ? 'black' : 'white';
 }
 
-
 // Get the YIQ number of the color
 // http://en.wikipedia.org/wiki/YIQ
-function theme_xtecboost_get_YIQ($hexcolor){
+function theme_xtecboost_get_YIQ($hexcolor): int {
     $r = hexdec(substr($hexcolor, 1, 2));
     $g = hexdec(substr($hexcolor, 3, 2));
     $b = hexdec(substr($hexcolor, 5, 2));
-    return (int)((($r*299)+($g*587)+($b*114))/1000);
+
+    return (int)((($r * 299) + ($g * 587) + ($b * 114)) / 1000);
 }
 
 /**
@@ -185,18 +173,18 @@ function theme_xtecboost_get_YIQ($hexcolor){
  * @param array $args
  * @param bool $forcedownload
  * @param array $options
+ * @throws moodle_exception
  * @return bool
  */
-function theme_xtecboost_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    if ($context->contextlevel == CONTEXT_SYSTEM and $filearea === 'logo') {
-        $theme = theme_config::load('xtecboost');
-        return $theme->setting_file_serve('logo', $args, $forcedownload, $options);
-    } else {
-        send_file_not_found();
+function theme_xtecboost_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []): bool {
+    if ($context->contextlevel === CONTEXT_SYSTEM && $filearea === 'logo') {
+        return theme_config::load('xtecboost')->setting_file_serve('logo', $args, $forcedownload, $options);
     }
+
+    send_file_not_found();
 }
 
-function theme_xtecboost_is_service_enabled($service) {
+function theme_xtecboost_is_service_enabled($service): bool {
     if (function_exists('is_service_enabled')) {
         return is_service_enabled($service);
     }
@@ -205,30 +193,27 @@ function theme_xtecboost_is_service_enabled($service) {
 
 /**
  * Returns the name of the XTEC service currently running, with an optional prefix.
- * Current valid options are "eix", "alexandria" and "odissea" 
+ * Current valid options are "eix", "alexandria" , "odissea" and "eoi".
  *
  * @param string $prefix
+ * @throws dml_exception
  * @return string
  */
-function get_xtec_type($prefix = '') {
+function theme_xtecboost_get_xtec_type(string $prefix = ''): string {
     global $CFG;
 
     $type = '';
 
     if ($setting = get_config('theme_xtecboost', 'xtec_type')) {
-        $type = $prefix.$setting;
-    }
-    elseif (isset($CFG->isalexandria) && $CFG->isalexandria) {
-        $type = $prefix.'alexandria';
-    }
-    elseif (isset($CFG->isodissea) && $CFG->isodissea) {
-        $type = $prefix.'odissea';
-    }
-    elseif (isset($CFG->iseoi) && $CFG->iseoi) {
-        $type = $prefix.'eoi';
-    }
-    elseif (isset($CFG->isagora) && $CFG->isagora) {
-        $type = $prefix.'eix';
+        $type = $prefix . $setting;
+    } elseif (isset($CFG->isalexandria) && $CFG->isalexandria) {
+        $type = $prefix . 'alexandria';
+    } elseif (isset($CFG->isodissea) && $CFG->isodissea) {
+        $type = $prefix . 'odissea';
+    } elseif (isset($CFG->iseoi) && $CFG->iseoi) {
+        $type = $prefix . 'eoi';
+    } elseif (isset($CFG->isagora) && $CFG->isagora) {
+        $type = $prefix . 'eix';
     }
 
     return $type;

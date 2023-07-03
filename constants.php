@@ -22,7 +22,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('DEFAULT_HEADERBG', '#F8F8F8');
-define('DEFAULT_MAINCOLOR', '#FF494E');
-define('DEFAULT_FONTCOLOR', '#366944');
-define('DEFAULT_LINKSCOLOR', '#910048');
+const DEFAULT_HEADERBG = '#F8F8F8';
+const DEFAULT_MAINCOLOR = '#FF494E';
+const DEFAULT_FONTCOLOR = '#366944';
+const DEFAULT_LINKSCOLOR = '#910048';

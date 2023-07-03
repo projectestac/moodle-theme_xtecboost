@@ -22,91 +22,91 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-    require_once($CFG->dirroot.'/theme/xtecboost/lib.php');
-    include_once($CFG->dirroot.'/theme/xtecboost/constants.php');
+    require_once($CFG->dirroot . '/theme/xtecboost/lib.php');
+    include_once($CFG->dirroot . '/theme/xtecboost/constants.php');
 
     global $PAGE;
     $PAGE->requires->js('/theme/xtecboost/javascript/config.js');
-    $PAGE->requires->js_init_code('xtecboost_theme_onload({HEADERBG: "'.DEFAULT_HEADERBG.'", MAINCOLOR: "'.DEFAULT_MAINCOLOR.'", FONTCOLOR: "'.DEFAULT_FONTCOLOR.'", LINKSCOLOR: "'.DEFAULT_LINKSCOLOR.'"});');
-    
+    $PAGE->requires->js_init_code('xtecboost_theme_onload({HEADERBG: "' . DEFAULT_HEADERBG . '", MAINCOLOR: "' . DEFAULT_MAINCOLOR . '", FONTCOLOR: "' . DEFAULT_FONTCOLOR . '", LINKSCOLOR: "' . DEFAULT_LINKSCOLOR . '"});');
+
     $settings = new theme_boost_admin_settingspage_tabs('themesettingxtecboost', get_string('configtitle', 'theme_xtecboost'));
 
-    $page = new admin_settingpage('theme_xtecboost_general', get_string('generalsettings', 'theme_xtecboost'));
+    // General settings only available to xtecadmin.
+    if (function_exists('get_protected_agora') && get_protected_agora()) {
+        $page = new admin_settingpage('theme_xtecboost_general', get_string('generalsettings', 'theme_xtecboost'));
 
-    // Unaddable blocks.
-    // Blocks to be excluded when this theme is enabled in the "Add a block" list: Administration, Navigation, Courses and
-    // Section links.
-    $default = 'navigation,settings,course_list,section_links';
-    $setting = new admin_setting_configtext('theme_boost/unaddableblocks',
-        get_string('unaddableblocks', 'theme_boost'), get_string('unaddableblocks_desc', 'theme_boost'), $default, PARAM_TEXT);
-    $page->add($setting);
+        // Blocks to be excluded when this theme is enabled in the "Add a block" list: Administration, Navigation, Courses and Section links.
+        $default = 'navigation,settings,course_list,section_links';
+        $setting = new admin_setting_configtext('theme_boost/unaddableblocks',
+            get_string('unaddableblocks', 'theme_boost'), get_string('unaddableblocks_desc', 'theme_boost'), $default, PARAM_TEXT);
+        $page->add($setting);
 
+        // Preset.
+        $name = 'theme_xtecboost/preset';
+        $title = get_string('preset', 'theme_xtecboost');
+        $description = get_string('preset_desc', 'theme_xtecboost');
+        $default = 'default.scss';
 
-    // Preset.
-    $name = 'theme_xtecboost/preset';
-    $title = get_string('preset', 'theme_xtecboost');
-    $description = get_string('preset_desc', 'theme_xtecboost');
-    $default = 'default.scss';
+        $context = context_system::instance();
+        $fs = get_file_storage();
+        $files = $fs->get_area_files($context->id, 'theme_xtecboost', 'preset', 0, 'itemid, filepath, filename', false);
 
-    $context = context_system::instance();
-    $fs = get_file_storage();
-    $files = $fs->get_area_files($context->id, 'theme_xtecboost', 'preset', 0, 'itemid, filepath, filename', false);
+        $choices = [];
+        foreach ($files as $file) {
+            $choices[$file->get_filename()] = $file->get_filename();
+        }
+        // These are the built-in presets.
+        $choices['default.scss'] = 'default.scss';
+        $choices['plain.scss'] = 'plain.scss';
 
-    $choices = [];
-    foreach ($files as $file) {
-        $choices[$file->get_filename()] = $file->get_filename();
+        $setting = new admin_setting_configthemepreset($name, $title, $description, $default, $choices, 'boost');
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $page->add($setting);
+
+        // Preset files setting.
+        $name = 'theme_xtecboost/presetfiles';
+        $title = get_string('presetfiles', 'theme_xtecboost');
+        $description = get_string('presetfiles_desc', 'theme_xtecboost');
+
+        $setting = new admin_setting_configstoredfile($name, $title, $description, 'preset', 0,
+            ['maxfiles' => 20, 'accepted_types' => ['.scss']]);
+        $page->add($setting);
+
+        // Variable $body-color.
+        // We use an empty default value because the default colour should come from the preset.
+        $name = 'theme_xtecboost/brandcolor';
+        $title = get_string('brandcolor', 'theme_boost');
+        $description = get_string('brandcolor_desc', 'theme_boost');
+        $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $page->add($setting);
+
+        // Must add the page after defining all the settings!
+        $settings->add($page);
     }
-    // These are the built in presets.
-    $choices['default.scss'] = 'default.scss';
-    $choices['plain.scss'] = 'plain.scss';
-
-    $setting = new admin_setting_configthemepreset($name, $title, $description, $default, $choices, 'boost');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Preset files setting.
-    $name = 'theme_xtecboost/presetfiles';
-    $title = get_string('presetfiles','theme_xtecboost');
-    $description = get_string('presetfiles_desc', 'theme_xtecboost');
-
-    $setting = new admin_setting_configstoredfile($name, $title, $description, 'preset', 0,
-        array('maxfiles' => 20, 'accepted_types' => array('.scss')));
-    $page->add($setting);
-
-    // Variable $body-color.
-    // We use an empty default value because the default colour should come from the preset.
-    $name = 'theme_xtecboost/brandcolor';
-    $title = get_string('brandcolor', 'theme_boost');
-    $description = get_string('brandcolor_desc', 'theme_boost');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Must add the page after definiting all the settings!
-    $settings->add($page);
 
     // Advanced settings.
     $page = new admin_settingpage('theme_xtecboost_advanced', get_string('advancedsettings', 'theme_boost'));
 
-    // Raw SCSS to include before the content.
-    $setting = new admin_setting_scsscode('theme_xtecboost/scsspre',
-        get_string('rawscsspre', 'theme_boost'), get_string('rawscsspre_desc', 'theme_boost'), '', PARAM_RAW);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+    if (function_exists('get_protected_agora') && get_protected_agora()) {
+        // Raw SCSS to include before the content.
+        $setting = new admin_setting_scsscode('theme_xtecboost/scsspre',
+            get_string('rawscsspre', 'theme_boost'), get_string('rawscsspre_desc', 'theme_boost'), '', PARAM_RAW);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $page->add($setting);
 
-    // Raw SCSS to include after the content.
-    $setting = new admin_setting_scsscode('theme_xtecboost/scss', get_string('rawscss', 'theme_boost'),
-        get_string('rawscss_desc', 'theme_boost'), '', PARAM_RAW);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-    //$settings->add($page);
+        // Raw SCSS to include after the content.
+        $setting = new admin_setting_scsscode('theme_xtecboost/scss', get_string('rawscss', 'theme_boost'),
+            get_string('rawscss_desc', 'theme_boost'), '', PARAM_RAW);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $page->add($setting);
+    }
 
-    //
     global $CFG;
-    include_once($CFG->dirroot.'/local/agora/lib.php');
+    include_once($CFG->dirroot . '/local/agora/lib.php');
 
     // Header settings
-    $setting = new admin_setting_heading('theme_xtecboost/header_settings', get_string('header_settings', 'theme_xtecboost'), "");
+    $setting = new admin_setting_heading('theme_xtecboost/header_settings', get_string('header_settings', 'theme_xtecboost'), '');
     $page->add($setting);
 
     $name = 'theme_xtecboost/logo';
@@ -119,12 +119,12 @@ if ($ADMIN->fulltree) {
     $name = 'theme_xtecboost/headerbg';
     $title = get_string('headerbg', 'theme_xtecboost');
     $default = DEFAULT_HEADERBG;
-    $setting = new admin_setting_configcolourpicker($name, $title, "", $default);
+    $setting = new admin_setting_configcolourpicker($name, $title, '', $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     // Footer Params
-    $setting = new admin_setting_heading('theme_xtecboost/footer_settings', get_string('footer_settings', 'theme_xtecboost'), "");
+    $setting = new admin_setting_heading('theme_xtecboost/footer_settings', get_string('footer_settings', 'theme_xtecboost'), '');
     $page->add($setting);
 
     $name = 'theme_xtecboost/footnote';
@@ -166,7 +166,7 @@ if ($ADMIN->fulltree) {
         $page->add($setting);
     }
 
-    
+
     $name = 'theme_xtecboost/whatsapp';
     $title = get_string('whatsapp', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_tel_desc, '', PARAM_TEXT);
@@ -228,22 +228,25 @@ if ($ADMIN->fulltree) {
     $name = 'theme_xtecboost/colorset';
     $title = get_string('colorset', 'theme_xtecboost');
     $default = 'PEDC';
-    $choices = array('personalitzat' => get_string('custom', 'theme_xtecboost'),
-                    'PEDC' => get_string('PEDC', 'theme_xtecboost'),
-                    'grana' => get_string('grana', 'theme_xtecboost'),
-                    'coral' => get_string('coral', 'theme_xtecboost'),
-                    'kellygreen' => get_string('kellygreen', 'theme_xtecboost'),
-                    'colourful' => get_string('colourful', 'theme_xtecboost'));
+    $choices = [
+        'personalitzat' => get_string('custom', 'theme_xtecboost'),
+        'PEDC' => get_string('PEDC', 'theme_xtecboost'),
+        'grana' => get_string('grana', 'theme_xtecboost'),
+        'coral' => get_string('coral', 'theme_xtecboost'),
+        'kellygreen' => get_string('kellygreen', 'theme_xtecboost'),
+        'colourful' => get_string('colourful', 'theme_xtecboost')
+    ];
+
     if (theme_xtecboost_is_service_enabled('nodes')) {
         $colors = get_colors_from_nodes();
         if ($colors) {
             $choices['nodes'] = get_string('nodes_color', 'theme_xtecboost');
-            $init = 'init_nodes_colors("'.$colors['color'].'", "'.$colors['logo_color'].'");';
+            $init = 'init_nodes_colors("' . $colors['color'] . '", "' . $colors['logo_color'] . '");';
             $PAGE->requires->js_init_code($init);
         }
     }
 
-    $setting = new admin_setting_configselect($name, $title, "", $default, $choices);
+    $setting = new admin_setting_configselect($name, $title, '', $default, $choices);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
@@ -271,65 +274,60 @@ if ($ADMIN->fulltree) {
     $page->add($setting);
 
     // Select font settings
-    $setting = new admin_setting_heading('theme_xtecboost/font_settings', get_string('font_settings', 'theme_xtecboost'), "");
+    $setting = new admin_setting_heading('theme_xtecboost/font_settings', get_string('font_settings', 'theme_xtecboost'), '');
     $page->add($setting);
 
     $name = 'theme_xtecboost/fontsize';
     $title = get_string('fontsize', 'theme_xtecboost');
     $description = get_string('fontsizedesc', 'theme_xtecboost') .
-                   '<ul style="margin-left:15%;">' .
-                   '<li><span style="font-size:0.8rem">' .
-                   get_string('fontsizedesc1', 'theme_xtecboost') .
-                   '</span></li>' .
-                   '<li><span style="font-size:0.9rem">' .
-                   get_string('fontsizedesc2', 'theme_xtecboost') .
-                   '</span></li>' .
-                   '<li><span style="font-size:1rem">' .
-                   get_string('fontsizedesc3', 'theme_xtecboost') .
-                   '</span></li>' .
-                   '<li><span style="font-size:1.2rem">' .
-                   get_string('fontsizedesc4', 'theme_xtecboost') .
-                   '</span></li>' .
-                   '<li><span style="font-size:1.4rem">' .
-                   get_string('fontsizedesc5', 'theme_xtecboost') .
-                   '</span></li>' .
-                   '</ul>';
+        '<ul style="margin-left:15%;">' .
+        '<li><span style="font-size:0.8rem">' . get_string('fontsizedesc1', 'theme_xtecboost') . '</span></li>' .
+        '<li><span style="font-size:0.9rem">' . get_string('fontsizedesc2', 'theme_xtecboost') . '</span></li>' .
+        '<li><span style="font-size:1rem">' . get_string('fontsizedesc3', 'theme_xtecboost') . '</span></li>' .
+        '<li><span style="font-size:1.2rem">' . get_string('fontsizedesc4', 'theme_xtecboost') . '</span></li>' .
+        '<li><span style="font-size:1.4rem">' . get_string('fontsizedesc5', 'theme_xtecboost') . '</span></li>' .
+        '</ul>';
     $default = '100';
-    $choices = array('80' => get_string('fontsizedesc1', 'theme_xtecboost'),
-                    '90' => get_string('fontsizedesc2', 'theme_xtecboost'),
-                    '100' => get_string('fontsizedesc3', 'theme_xtecboost'),
-                    '120' => get_string('fontsizedesc4', 'theme_xtecboost'),
-                    '140' => get_string('fontsizedesc5', 'theme_xtecboost'));
+    $choices = [
+        '80' => get_string('fontsizedesc1', 'theme_xtecboost'),
+        '90' => get_string('fontsizedesc2', 'theme_xtecboost'),
+        '100' => get_string('fontsizedesc3', 'theme_xtecboost'),
+        '120' => get_string('fontsizedesc4', 'theme_xtecboost'),
+        '140' => get_string('fontsizedesc5', 'theme_xtecboost'),
+    ];
+
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
-
 
     // Select font style
     $name = 'theme_xtecboost/fontstyle';
     $title = get_string('fontstyle', 'theme_xtecboost');
     $description = get_string('fontstyledesc', 'theme_xtecboost') .
-                   '<ul style="margin-left:15%;">' .
-                   '<li><span style="font-family: arial, helvetica, clean, sans-serif; !important">' .
-                   get_string('fontstyledesc1', 'theme_xtecboost') .
-                   '</span></li>' .
-                   '<li><span style="font-family: Abecedario; !important">' .
-                   get_string('fontstyledesc2', 'theme_xtecboost') .
-                   '</span></li>'.
-                   '<li><span style="text-transform: uppercase; !important">' .
-                   get_string('fontstyledesc3', 'theme_xtecboost') .
-                   '</span></li>' .
-                   '</ul>';
+        '<ul style="margin-left:15%;">' .
+        '<li><span style="font-family: arial, helvetica, clean, sans-serif; !important">' .
+        get_string('fontstyledesc1', 'theme_xtecboost') .
+        '</span></li>' .
+        '<li><span style="font-family: Abecedario; !important">' .
+        get_string('fontstyledesc2', 'theme_xtecboost') .
+        '</span></li>' .
+        '<li><span style="text-transform: uppercase; !important">' .
+        get_string('fontstyledesc3', 'theme_xtecboost') .
+        '</span></li>' .
+        '</ul>';
     $default = 'normal';
-    $choices = array('normal' =>  get_string('fontstyledesc1', 'theme_xtecboost'),
-                    'lligada' =>  get_string('fontstyledesc2', 'theme_xtecboost'),
-                    'majuscules' => get_string('fontstyledesc3', 'theme_xtecboost'));
+    $choices = [
+        'normal' => get_string('fontstyledesc1', 'theme_xtecboost'),
+        'lligada' => get_string('fontstyledesc2', 'theme_xtecboost'),
+        'majuscules' => get_string('fontstyledesc3', 'theme_xtecboost'),
+    ];
+
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     // Select font settings
-    $setting = new admin_setting_heading('theme_xtecboost/css_settings', get_string('css_settings', 'theme_xtecboost'), "");
+    $setting = new admin_setting_heading('theme_xtecboost/css_settings', get_string('css_settings', 'theme_xtecboost'), '');
     $page->add($setting);
 
     // Set CSS to be imported
@@ -337,7 +335,7 @@ if ($ADMIN->fulltree) {
     $title = get_string('importcss', 'theme_xtecboost');
     $description = get_string('importcssdesc', 'theme_xtecboost');
     $default = '';
-    $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_CLEAN);
+    $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
@@ -352,10 +350,7 @@ if ($ADMIN->fulltree) {
 
 
     if (function_exists('get_protected_agora') && get_protected_agora()) {
-        //$page = new admin_settingpage('theme_xtecboost_', get_string('adminxtec', 'theme_boost'));
-
-
-        $setting = new admin_setting_heading('theme_xtecboost/advices_user', get_string('advices_user', 'theme_xtecboost'), "");
+        $setting = new admin_setting_heading('theme_xtecboost/advices_user', get_string('advices_user', 'theme_xtecboost'), '');
         $page->add($setting);
 
         $name = 'theme_xtecboost/agora_alert_message';
@@ -382,7 +377,7 @@ if ($ADMIN->fulltree) {
         $page->add($setting);
         $setting->set_updatedcallback('theme_reset_all_caches');
 
-        $setting = new admin_setting_heading('theme_xtecboost/advices_admin', get_string('advices_admin', 'theme_xtecboost'), "");
+        $setting = new admin_setting_heading('theme_xtecboost/advices_admin', get_string('advices_admin', 'theme_xtecboost'), '');
         $page->add($setting);
 
         $name = 'theme_xtecboost/admin_alert_message';
@@ -410,17 +405,19 @@ if ($ADMIN->fulltree) {
         $setting->set_updatedcallback('theme_reset_all_caches');
 
         // XTEC service type
-        $setting = new admin_setting_heading('theme_xtecboost/xtec_type_heading', get_string('xtec_type_heading', 'theme_xtecboost'), "");
+        $setting = new admin_setting_heading('theme_xtecboost/xtec_type_heading', get_string('xtec_type_heading', 'theme_xtecboost'), '');
         $page->add($setting);
 
         $name = 'theme_xtecboost/xtec_type';
         $title = get_string('xtec_type', 'theme_xtecboost');
         $description = get_string('xtec_type_desc', 'theme_xtecboost');
         $default = 'eix';
-        $choices = array('eix' => get_string('xtectypedesc1', 'theme_xtecboost'),
-                         'eoi' => get_string('xtectypedesc2', 'theme_xtecboost'),
-                         'alexandria' => get_string('xtectypedesc3', 'theme_xtecboost'),
-                         'odissea' => get_string('xtectypedesc4', 'theme_xtecboost'));
+        $choices = [
+            'eix' => get_string('xtectypedesc1', 'theme_xtecboost'),
+            'eoi' => get_string('xtectypedesc2', 'theme_xtecboost'),
+            'alexandria' => get_string('xtectypedesc3', 'theme_xtecboost'),
+            'odissea' => get_string('xtectypedesc4', 'theme_xtecboost'),
+        ];
         $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
         $setting->set_updatedcallback('theme_reset_all_caches');
         $page->add($setting);

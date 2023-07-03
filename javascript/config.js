@@ -1,4 +1,3 @@
-
 // Global variables
 //let colorset;
 //let maincolor, fontcolor, linkscolor;
@@ -11,33 +10,29 @@ function init_nodes_colors(color, logocolor) {
 }
 
 function changeColors() {
-    colorProfile = colorset.value;
+    let colorProfile = colorset.value;
 
-    if(colorProfile == 'PEDC') {
+    if (colorProfile === 'PEDC') {
         maincolor.value = PEDC.MAINCOLOR || '#FF494E';
         fontcolor.value = PEDC.FONTCOLOR || '#007377';
         linkscolor.value = PEDC.LINKSCOLOR || '#910048';
-    }
-    else if(colorProfile == 'grana') {
+    } else if (colorProfile === 'grana') {
         maincolor.value = '#AC2013';
         fontcolor.value = '#303030';
         linkscolor.value = '#AC2013';
-    }
-    else if(colorProfile == 'coral') {
+    } else if (colorProfile === 'coral') {
         maincolor.value = '#FF4444';
         fontcolor.value = '#00BBBB';
         linkscolor.value = '#008888';
-    }
-    else if(colorProfile == 'kellygreen') {
+    } else if (colorProfile === 'kellygreen') {
         maincolor.value = '#349C5F';
         fontcolor.value = '#B27409';
         linkscolor.value = '#B27409';
-    }
-    else if(colorProfile == 'colourful') {
+    } else if (colorProfile === 'colourful') {
         maincolor.value = '#0996B2';
         fontcolor.value = '#BF1D61';
         linkscolor.value = '#BF1D61';
-    } else if(colorProfile == 'nodes') {
+    } else if (colorProfile === 'nodes') {
         maincolor.value = nodescolor;
         fontcolor.value = nodescolor;
         linkscolor.value = nodescolor;
@@ -64,7 +59,7 @@ function changeToPersonalized() {
 }
 
 
-function xtecboost_theme_onload( defaultColors = {}) {
+function xtecboost_theme_onload(defaultColors = {}) {
 
     PEDC = defaultColors;
 

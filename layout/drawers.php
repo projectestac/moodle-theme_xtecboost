@@ -53,20 +53,20 @@ if ($courseindexopen) {
 }
 
 $blockshtml = $OUTPUT->blocks('side-pre');
-$hasblocks = (strpos($blockshtml, 'data-block=') !== false || !empty($addblockbutton));
+$hasblocks = (str_contains($blockshtml, 'data-block=') || !empty($addblockbutton));
 if (!$hasblocks) {
     $blockdraweropen = false;
 }
+
 $courseindex = core_course_drawer();
 if (!$courseindex) {
     $courseindexopen = false;
 }
 
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
-
 $forceblockdraweropen = $OUTPUT->firstview_fakeblocks();
-
 $secondarynavigation = false;
+
 $overflow = '';
 if ($PAGE->has_secondary_navigation()) {
     $tablistnav = $PAGE->has_tablist_secondary_navigation();
@@ -93,17 +93,17 @@ if ($logocentre) {
     $fs = get_file_storage();
     $files = $fs->get_area_files($context->id, 'theme_xtecboost', 'logo', 0, 'itemid, filepath, filename', false);
     foreach ($files as $file) {
-        $logocentre = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), 
+        $logocentre = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(),
             $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
     }
 } else {
     $xtec_type = get_config('theme_xtecboost', 'xtec_type');
-    $png_image = 'top_'.$xtec_type.'_color.png';
-    $logocentre = $CFG->wwwroot."/theme/xtecboost/pix/".$png_image;
+    $png_image = 'top_' . $xtec_type . '_color.png';
+    $logocentre = $CFG->wwwroot . '/theme/xtecboost/pix/' . $png_image;
 }
 
 $templatecontext = [
-    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
+    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), 'escape' => false]),
     'output' => $OUTPUT,
     'sidepreblocks' => $blockshtml,
     'hasblocks' => $hasblocks,
@@ -122,8 +122,8 @@ $templatecontext = [
     'overflow' => $overflow,
     'headercontent' => $headercontent,
     'addblockbutton' => $addblockbutton,
-    'logodepartamenteducacio' => $CFG->wwwroot.'/theme/xtecboost/pix/departament.png' ,
-    'logocentre' =>  $logocentre
+    'logodepartamenteducacio' => $CFG->wwwroot . '/theme/xtecboost/pix/departament.png',
+    'logocentre' => $logocentre,
 ];
 
 echo $OUTPUT->render_from_template('theme_xtecboost/drawers', $templatecontext);

@@ -16,8 +16,6 @@
 
 namespace theme_xtecboost\output;
 
-use moodle_url;
-use html_writer;
 use get_string;
 use cache;
 
@@ -27,20 +25,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     public function favicon() {
         global $CFG;
-        $type = get_xtec_type('_');
         // TODO: Use theme/image.php instead of a direct path!
-        return $CFG->wwwroot.'/theme/'.$this->page->theme->name.'/pix/favicon'.$type.'.ico';        
+        $type = theme_xtecboost_get_xtec_type('_');
+        return $CFG->wwwroot . '/theme/' . $this->page->theme->name . '/pix/favicon' . $type . '.ico';
     }
 
-	protected function render_context_header(\context_header $contextheader) {
-		$html = parent::render_context_header($contextheader);
+    protected function render_context_header(\context_header $contextheader) {
+        return parent::render_context_header($contextheader);
+    }
 
-		//$html .= '<div style="width:100vh; background-color:#FF494E;z-index: 1;"> &nbsp; </div>';
-		return $html;
-
-	}
-
-	public function social_icons() {
+    public function social_icons() {
         $cache = cache::make('core', 'htmlpurifier');
         if ($text = $cache->get('social_icons')) {
             return $text;
@@ -84,20 +78,20 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $content .= '<a href="' . $url . '" target="_blank"><i class="icon fa fa-youtube" aria-hidden="true" title="Youtube"></i></a>';
         }
         if ($url = get_config('theme_xtecboost', 'skype')) {
-            $url     = 'skype://' . $url;
+            $url = 'skype://' . $url;
             $content .= '<a href="' . $url . '" target="_blank"><i class="icon fa fa-skype" aria-hidden="true" title="Skype"></i></a>';
         }
         $cache->set('social_icons', $content);
         return $content;
     }
 
-	/**
+    /**
      * This code renders the custom lang items
      */
     protected function render_lang($lang, $langname, $url, $currentlang) {
         $class = 'lang fa';
         if ($langname === $currentlang) {
-            $class   .= ' current-lang';
+            $class .= ' current-lang';
             $content = '<li title="' . $langname . '" class="' . $class . '">' . $lang . '</li>';
         } else {
             $content = '<li class="' . $class . '"><a href="' . $url . '" title="' . $langname . '">' . $lang . '</a></li>';
@@ -105,20 +99,20 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $content;
     }
 
-	public function lang_menu() {
-        $strlang  = get_string('language');
+    public function lang_menu() {
+        $strlang = get_string('language');
         $currlang = current_language();
-        $langs    = get_string_manager()->get_list_of_translations();
+        $langs = get_string_manager()->get_list_of_translations();
 
         if (count($langs) < 2) {
             return '';
         }
 
-        if (sizeof($langs) > 5) {
-            $s        = new single_select($this->page->url, 'lang', $langs, $currlang, null);
+        if (count($langs) > 5) {
+            $s = new single_select($this->page->url, 'lang', $langs, $currlang, null);
             $s->label = get_accesshide($strlang);
             $s->class = 'langmenu';
-            $content  = $this->render($s);
+            $content = $this->render($s);
         } else {
             if (isset($langs[$currlang])) {
                 $currentlang = $langs[$currlang];
@@ -127,7 +121,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
             $content = '<ul>';
             foreach ($langs as $langtype => $langname) {
-                $url     = new \moodle_url($this->page->url, ['lang' => $langtype]);
+                $url = new \moodle_url($this->page->url, ['lang' => $langtype]);
                 $content .= $this->render_lang($langtype, $langname, $url, $currentlang);
             }
             $content .= '</ul>';
@@ -136,42 +130,32 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $content;
     }
 
-    public function header_logos() {
-        $logos = '<a href="http://ensenyament.gencat.cat/ca/inici/" class="brand ensenyament d-none d-sm-inline"><img src="'.$this->image_url('departament', 'theme').'" alt="Departament d\'Educació" title="" /></a>';
+    /**
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function footer_logos(): string {
+        $xtec_type = theme_xtecboost_get_xtec_type();
+        $logos = '<a href="http://ensenyament.gencat.cat/ca/inici/" class="brand ensenyament"><img src="' . $this->image_url('departament', 'theme') . '" alt="Departament d\'Educació" title="" /></a>';
+        $logos .= '<a href="http://xtec.gencat.cat" class="brand xtec"><img src="' . $this->image_url('xtec', 'theme') . '" alt="Xarxa Telemàtica Educativa de Catalunya" title="" /></a>';
 
-        return $logos;
-    }
-
-    public function footer_logos() {
-        global $CFG;
-        $xtec_type = get_xtec_type();
-        $logos = '<a href="http://ensenyament.gencat.cat/ca/inici/" class="brand ensenyament"><img src="'.$this->image_url('departament', 'theme').'" alt="Departament d\'Educació" title="" /></a>';
-        $logos .= '<a href="http://xtec.gencat.cat" class="brand xtec"><img src="'.$this->image_url('xtec', 'theme').'" alt="Xarxa Telemàtica Educativa de Catalunya" title="" /></a>';
-        if ($xtec_type == 'alexandria') {
+        if ($xtec_type === 'alexandria') {
             $href = 'https://alexandria.xtec.cat/';
-            $logos .= '<a href="'.$href.'" target="_blank" class="agora_footer"><img src="'.$this->image_url('logo_main_alexandria', 'theme').'" alt="Alexandria" title="" /></a>';
-        }
-        elseif ($xtec_type == 'odissea') {
+            $logos .= '<a href="' . $href . '" target="_blank" class="agora_footer"><img src="' . $this->image_url('logo_main_alexandria', 'theme') . '" alt="Alexandria" title="" /></a>';
+        } elseif ($xtec_type === 'odissea') {
             $href = 'https://odissea.xtec.cat/';
-            $logos .= '<a href="'.$href.'" target="_blank" class="agora_footer"><img src="'.$this->image_url('logo_main_odissea', 'theme').'" alt="Odissea" title="" /></a>';
-        }
-        elseif ($xtec_type == 'eoi') {
+            $logos .= '<a href="' . $href . '" target="_blank" class="agora_footer"><img src="' . $this->image_url('logo_main_odissea', 'theme') . '" alt="Odissea" title="" /></a>';
+        } elseif ($xtec_type === 'eoi') {
             $href = 'https://agora-eoi.xtec.cat/';
-            $logos .= '<a href="'.$href.'" target="_blank" class="agora_footer"><img src="'.$this->image_url('logo_main_eoi', 'theme').'" alt="Àgora-EOI" title="" /></a>';
-        }
-        elseif ($xtec_type == 'eix') {
+            $logos .= '<a href="' . $href . '" target="_blank" class="agora_footer"><img src="' . $this->image_url('logo_main_eoi', 'theme') . '" alt="Àgora-EOI" title="" /></a>';
+        } elseif ($xtec_type === 'eix') {
             $href = 'https://educaciodigital.cat/';
-            $logos .= '<a href="'.$href.'" target="_blank" class="agora_footer"><img src="'.$this->image_url('logo_main_eix', 'theme').'" alt="Eix" title="" /></a>';
+            $logos .= '<a href="' . $href . '" target="_blank" class="agora_footer"><img src="' . $this->image_url('logo_main_eix', 'theme') . '" alt="Eix" title="" /></a>';
         }
-        $logos .= '<a href="https://moodle.org" target="_blank" class="moodle_footer" title="Moodle"><img src="'.$this->image_url('moodlelogo').'" alt="'.get_string('moodlelogo').'"/></a>';
+
+        $logos .= '<a href="https://moodle.org" target="_blank" class="moodle_footer" title="Moodle"><img src="' . $this->image_url('moodlelogo') . '" alt="' . get_string('moodlelogo') . '"/></a>';
 
         return $logos;
     }
 
-    public function centre_logo() {
-
-        $centre_logo = get_config('theme_xtecboost', 'twitter');
-
-        return $centre_logo;
-    }
 }

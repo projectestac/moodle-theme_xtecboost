@@ -27,15 +27,14 @@ defined('MOODLE_INTERNAL') || die();
  */
 class theme_xtecboost_admin_settingspage_tabs extends admin_settingpage {
 
-    /** @var The tabs */
-    protected $tabs = array();
+    protected array $tabs = [];
 
     /**
      * Add a tab.
      *
      * @param admin_settingpage $tab A tab.
      */
-    public function add_tab(admin_settingpage $tab) {
+    public function add_tab(admin_settingpage $tab): bool {
         foreach ($tab->settings as $setting) {
             $this->settings->{$setting->name} = $setting;
         }
@@ -43,7 +42,7 @@ class theme_xtecboost_admin_settingspage_tabs extends admin_settingpage {
         return true;
     }
 
-    public function add($tab) {
+    public function add($tab): bool {
         return $this->add_tab($tab);
     }
 
@@ -59,13 +58,14 @@ class theme_xtecboost_admin_settingspage_tabs extends admin_settingpage {
     /**
      * Generate the HTML output.
      *
+     * @throws coding_exception
      * @return string
      */
-    public function output_html() {
+    public function output_html(): string {
         global $OUTPUT;
 
         $activetab = optional_param('activetab', '', PARAM_TEXT);
-        $context = array('tabs' => array());
+        $context = ['tabs' => []];
         $havesetactive = false;
 
         foreach ($this->get_tabs() as $tab) {
@@ -79,12 +79,12 @@ class theme_xtecboost_admin_settingspage_tabs extends admin_settingpage {
                 $active = true;
             }
 
-            $context['tabs'][] = array(
+            $context['tabs'][] = [
                 'name' => $tab->name,
                 'displayname' => $tab->visiblename,
                 'html' => $tab->output_html(),
                 'active' => $active,
-            );
+            ];
         }
 
         if (empty($context['tabs'])) {
