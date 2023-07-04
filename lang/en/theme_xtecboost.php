@@ -35,6 +35,9 @@ $string['presetfiles'] = 'Additional theme preset files';
 $string['presetfiles_desc'] = 'Preset files can be used to dramatically alter the appearance of the theme. See <a href="https://docs.moodle.org/dev/Boost_Presets">Boost presets</a> for information on creating and sharing your own preset files, and see the <a href="https://archive.moodle.net/boost">Presets repository</a> for presets that others have shared.';
 $string['disabled'] = 'Disabled';
 
+$string['course_settings'] = 'Course settings';
+$string['coursecontentmaxwidth'] = 'Course content maximum width';
+$string['coursecontentmaxwidthdesc'] = 'The maximum width of the course content area in pixels. Allowed values go from 500 to 1500. If there is no value or it is incorrect, the default value will be used instead (830).';
 
 $string['header_settings'] = 'Header settings';
 $string['logo'] = 'Image for the header';

@@ -58,13 +58,16 @@
 
 <nav class="navbar fixed-top navbar-light bg-white navbar-expand" aria-label="{{#str}}sitemenubar, admin{{/str}}">
 
-    <button class="navbar-toggler aabtn d-block d-md-none px-1 my-1 border-0" data-toggler="drawers" data-action="toggle" data-target="theme_boost-drawers-primary">
+    <button class="navbar-toggler aabtn d-block d-md-none px-1 my-1 border-0"
+            data-toggler="drawers"
+            data-action="toggle"
+            data-target="theme_boost-drawers-primary">
         <span class="navbar-toggler-icon"></span>
         <span class="sr-only">{{#str}}sidepanel, core{{/str}}</span>
     </button>
 
     <a href="https://educacio.gencat.cat/" class="navbar-brand d-none d-md-flex align-items-center m-0 mr-4 p-0 aabtn">
-        <img src= "{{{ logodepartamenteducacio }}}" class="logo mr-1" alt="Departament d'Educació">        
+        <img src="{{{ logodepartamenteducacio }}}" class="logo mr-1" alt="Departament d'Educació">
     </a>
 
     <a href="{{{ config.homeurl }}}" class="navbar-brand d-none d-md-flex align-items-center m-0 mr-4 p-0 aabtn">
@@ -88,7 +91,7 @@
         {{{ output.page_heading_menu }}}
     </ul>
 
-    
+
     <div id="usernavigation" class="navbar-nav ml-auto">
         {{# output.search_box }}
             {{{ output.search_box }}}
@@ -107,5 +110,43 @@
         {{{ output.edit_switch }}}
     </div>
 </nav>
+
+{{^element.frozen}}
+{{#js}}
+  require(['jquery'], function($) {
+    $(function () {
+      // Hide all submenus
+      $('#primary-navigation .navbar-nav .nav-item .dropdown-menu ul').css({ display: 'none'});
+      // Store a reference to the currently deployed submenu
+      document.$currentSubMenu = null;
+      // Show the little triangle near items that are submenu headers
+      $('#primary-navigation .navbar-nav .nav-item .dropdown-item[id]').addClass('dropdown-toggle');
+      // Define the click handler
+      $('#primary-navigation .navbar-nav .nav-item .dropdown-item').click((ev) => {
+        const id = ev.target.id;
+        // Only use id starting with 'drop-down' texts to avoid conflicts with default course forum.
+        if (id && id.startsWith("drop-down")) {
+          // Dropdown items with 'id' are submenu headers
+          ev.stopPropagation();
+          ev.preventDefault();
+          // Find the target submenu
+          $targetMenu = $(`ul[aria-labelledby=${id}]`);
+          if ($targetMenu.length) {
+            // Hide the current submenu if not ancestor of the target
+            if (document.$currentSubMenu && !$.contains(document.$currentSubMenu[0], $targetMenu[0]))
+              document.$currentSubMenu.css({ display: 'none' });
+            // Store the current submenu for later reference
+            document.$currentSubMenu = $targetMenu;
+            // Display the submenu
+            $targetMenu.css({ display: 'inherit' });
+          }
+          else
+            console.log('Warning: submenu without items');
+        }
+      });
+    });
+  });
+{{/js}}
+{{/element.frozen}}
 
 {{> theme_boost/primary-drawer-mobile }}

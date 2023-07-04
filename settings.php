@@ -37,7 +37,7 @@ if ($ADMIN->fulltree) {
 
         // Blocks to be excluded when this theme is enabled in the "Add a block" list: Administration, Navigation, Courses and Section links.
         $default = 'navigation,settings,course_list,section_links';
-        $setting = new admin_setting_configtext('theme_boost/unaddableblocks',
+        $setting = new admin_setting_configtext('theme_xtecboost/unaddableblocks',
             get_string('unaddableblocks', 'theme_boost'), get_string('unaddableblocks_desc', 'theme_boost'), $default, PARAM_TEXT);
         $page->add($setting);
 
@@ -123,6 +123,17 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
+    // Course settings
+    $setting = new admin_setting_heading('theme_xtecboost/course_settings', get_string('course_settings', 'theme_xtecboost'), '');
+    $page->add($setting);
+
+    $name = 'theme_xtecboost/coursecontentmaxwidth';
+    $title = get_string('coursecontentmaxwidth', 'theme_xtecboost');
+    $description = get_string('coursecontentmaxwidthdesc', 'theme_xtecboost');
+    $setting = new admin_setting_configtext($name, $title, $description, '830', PARAM_INT);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
     // Footer Params
     $setting = new admin_setting_heading('theme_xtecboost/footer_settings', get_string('footer_settings', 'theme_xtecboost'), '');
     $page->add($setting);
@@ -141,19 +152,19 @@ if ($ADMIN->fulltree) {
     $name = 'theme_xtecboost/website';
     $title = get_string('website', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_url_desc, '', PARAM_URL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/email';
     $title = get_string('email');
     $setting = new admin_setting_configtext($name, $title, $description_mail_desc, '', PARAM_EMAIL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/phone';
     $title = get_string('phone');
     $setting = new admin_setting_configtext($name, $title, $description_tel_desc, '', PARAM_TEXT);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     if (theme_xtecboost_is_service_enabled('nodes')) {
@@ -162,7 +173,7 @@ if ($ADMIN->fulltree) {
         $description = get_string('nodesdesc', 'theme_xtecboost');
         $default = 1;
         $setting = new admin_setting_configcheckbox($name, $title, $description, $default);
-        $setting->set_updatedcallback('theme_xtec2_clean_cache');
+        $setting->set_updatedcallback('theme_reset_all_caches');
         $page->add($setting);
     }
 
@@ -170,55 +181,55 @@ if ($ADMIN->fulltree) {
     $name = 'theme_xtecboost/whatsapp';
     $title = get_string('whatsapp', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_tel_desc, '', PARAM_TEXT);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/facebook';
     $title = get_string('facebook', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_url_desc, '', PARAM_URL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/twitter';
     $title = get_string('twitter', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_url_desc, '', PARAM_URL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/instagram';
     $title = get_string('instagram', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_url_desc, '', PARAM_URL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/flickr';
     $title = get_string('flickr', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_url_desc, '', PARAM_URL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/linkedin';
     $title = get_string('linkedin', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_url_desc, '', PARAM_URL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/pinterest';
     $title = get_string('pinterest', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_url_desc, '', PARAM_URL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/youtube';
     $title = get_string('youtube', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, $description_url_desc, '', PARAM_URL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     $name = 'theme_xtecboost/skype';
     $title = get_string('skype', 'theme_xtecboost');
     $setting = new admin_setting_configtext($name, $title, get_string('skypedesc', 'theme_xtecboost'), '', PARAM_URL);
-    $setting->set_updatedcallback('theme_xtec2_clean_cache');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     // Select color set

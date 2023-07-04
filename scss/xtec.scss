@@ -7,7 +7,6 @@ $fontsize: 1rem !default;
 $fontfamily: null !default;
 $texttransform: null !default;
 
-
 @font-face {
     font-family: Abecedario;
     src: url('[[font:theme|Abecedario.ttf]]');
@@ -73,11 +72,21 @@ h4 {
     display: none;
 }
 
+/* Top menu */
+.primary-navigation .navigation .nav-link {
+    height: 51px;
+}
+
+/* Custom header logo */
+.custom-header {
+    text-align: right;
+    overflow: clip;
+}
+
 /* Navigation */
 nav.fixed-top.navbar {
 
     padding: 0.5rem;
-
     border-bottom: 2px solid $maincolor;
 
     .brand {
@@ -127,7 +136,6 @@ nav.fixed-top.navbar {
             min-height: 20px;
         }
     }
-
 }
 
 .breadcrumb {

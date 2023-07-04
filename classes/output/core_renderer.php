@@ -39,7 +39,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($text = $cache->get('social_icons')) {
             return $text;
         }
-        $content = "";
+        $content = '';
         if ($url = get_config('theme_xtecboost', 'website')) {
             $content .= '<a href="' . $url . '" target="_blank"><i class="icon fa fa-globe" aria-hidden="true" title="Web"></i></a>';
         }
@@ -55,7 +55,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($url = get_config('theme_xtecboost', 'whatsapp')) {
             $content .= '<a href="tel:' . $url . '" target="_blank"><i class="icon fa fa-whatsapp" aria-hidden="true" title="' . get_string('whatsapp_tel', 'theme_xtecboost', $url) . '"></i></a>';
         }
-
         if ($url = get_config('theme_xtecboost', 'facebook')) {
             $content .= '<a href="' . $url . '" target="_blank"><i class="icon fa fa-facebook" aria-hidden="true" title="Facebook"></i></a>';
         }

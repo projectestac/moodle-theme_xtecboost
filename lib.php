@@ -20,16 +20,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function theme_xtecboost_clean_cache(): void {
-    $cache = cache::make('core', 'htmlpurifier');
-    $cache->delete('social_icons', true);
-    $cache->delete('agora_alerts', true);
-}
-
 /**
  * Returns the main SCSS content.
  *
- * @param theme_config $theme The theme config object.
  * @return string
  */
 function theme_xtecboost_get_main_scss_content(): string {
@@ -44,16 +37,7 @@ function theme_xtecboost_get_main_scss_content(): string {
  * @return string
  */
 function theme_xtecboost_get_extra_scss($theme): string {
-    $content = '';
-    $imageurl = $theme->setting_file_url('logo', 'logo');
-
-    // Sets the background image, and its settings.
-    if (!empty($imageurl)) {
-        $content .= "#page-header { background-image: url('$imageurl') !important; }";
-    }
-
-    // Always return the background image with the scss when we have it.
-    return $content;
+    return '';
 }
 
 /**
@@ -62,15 +46,14 @@ function theme_xtecboost_get_extra_scss($theme): string {
  * @return string compiled css
  */
 function theme_xtecboost_get_precompiled_css(): string {
-    global $CFG;
-    return file_get_contents($CFG->dirroot . '/theme/xtecboost/style/custom.css');
+    return '';
 }
 
 /**
  * Get SCSS to prepend.
  *
  * @param theme_config $theme The theme config object.
- * @return array
+ * @return array|string
  */
 function theme_xtecboost_get_pre_scss($theme): array|string {
     $scss = '';
@@ -137,6 +120,17 @@ function theme_xtecboost_get_pre_scss($theme): array|string {
 
     if (!empty($theme->settings->fontsize)) {
         $scss .= '$font-size-base: ' . (1 / 100 * $theme->settings->fontsize) . "rem !default;\n";
+    }
+
+    if (!empty($theme->settings->coursecontentmaxwidth)) {
+        $coursecontentmaxwidth = (int)$theme->settings->coursecontentmaxwidth;
+        if ($coursecontentmaxwidth >= 500 && $coursecontentmaxwidth <= 1500) {
+            $scss .= '$course-content-maxwidth: ' . $theme->settings->coursecontentmaxwidth . 'px !default;' . "\n";
+        } else {
+            $scss .= '$course-content-maxwidth: 830px !default;' . "\n";
+        }
+    } else {
+        $scss .= '$course-content-maxwidth: 830px !default;' . "\n";
     }
 
     // Append pre-scss.

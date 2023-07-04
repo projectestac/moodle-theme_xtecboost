@@ -25,18 +25,28 @@ defined('MOODLE_INTERNAL') || die();
 
 $THEME->name = 'xtecboost';
 $THEME->sheets = [];
+$THEME->parents_exclude_sheets = [];
 $THEME->editor_sheets = [];
 $THEME->parents = ['boost'];
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
-$THEME->extrascsscallback = 'theme_xtecboost_get_extra_scss';
 $THEME->prescsscallback = 'theme_xtecboost_get_pre_scss';
+$THEME->extrascsscallback = 'theme_xtecboost_get_extra_scss';
 $THEME->precompiledcsscallback = 'theme_xtecboost_get_precompiled_css';
 $THEME->requiredblocks = ''; // Allow removal of block 'Navigation' and 'settings'
 $THEME->yuicssmodules = [];
 $THEME->usefallback = true;
+$THEME->enable_dock = false;
+$THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
+$THEME->iconsystem = \core\output\icon_system::FONTAWESOME;
+$THEME->haseditswitch = true;
+$THEME->usescourseindex = true;
 $THEME->scss = static function () {
     return theme_xtecboost_get_main_scss_content();
 };
+// By default, all boost theme do not need their titles displayed.
+$THEME->activityheaderconfig = [
+    'notitle' => true,
+];
 
 $THEME->layouts = [
     // Most backwards compatible layout without the blocks.
@@ -186,21 +196,3 @@ $THEME->layouts = [
     ],
 ];
 
-// The $THEME->layouts setting is not duplicated here as they are properly inherited from theme_boost.
-
-$THEME->parents = ['boost'];
-$THEME->enable_dock = false;
-$THEME->extrascsscallback = 'theme_boost_get_extra_scss';
-$THEME->prescsscallback = 'theme_boost_get_pre_scss';
-$THEME->precompiledcsscallback = 'theme_boost_get_precompiled_css';
-$THEME->yuicssmodules = [];
-$THEME->rendererfactory = 'theme_overridden_renderer_factory';
-$THEME->requiredblocks = '';
-$THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
-$THEME->iconsystem = \core\output\icon_system::FONTAWESOME;
-$THEME->haseditswitch = true;
-$THEME->usescourseindex = true;
-// By default, all boost theme do not need their titles displayed.
-$THEME->activityheaderconfig = [
-    'notitle' => true,
-];

@@ -36,6 +36,10 @@ $string['disabled'] = 'Desactivado';
 $string['region-side-pre'] = 'Right';
 $string['showhideblocks'] = 'Mostrar/Ocultar bloques';
 
+$string['course_settings'] = 'Parámetros de los cursos';
+$string['coursecontentmaxwidth'] = 'Anchura máxima del contenido de los cursos';
+$string['coursecontentmaxwidthdesc'] = 'Valor númerico para indicar la anchura máxima del contenido de los cursos en píxeles. Los valores permitidos van de 500 a 1500. Si no se especifica o si el valor no es correcto, se utilizará la anchura por defecto (830).';
+
 $string['footer_settings'] = 'Parámetros del pie de página';
 $string['footnote'] = 'Nota a pie de página';
 $string['footnotedesc'] = 'Lo que añada en esta área de texto se mostrará en el pie de página de todo su sitio Moodle.';

@@ -36,6 +36,10 @@ $string['disabled'] = 'Desactivat';
 $string['region-side-pre'] = 'Dreta';
 $string['showhideblocks'] = 'Mostra/Amaga blocs';
 
+$string['course_settings'] = 'Paràmetres del curs';
+$string['coursecontentmaxwidth'] = 'Amplada màxima del contingut dels cursos';
+$string['coursecontentmaxwidthdesc'] = 'Amplada màxima del contingut dels cursos en píxels. Els valors permesos van de 500 a 1500. Si no s\'especifica o si el valor no és correcte, s\'utilitzarà l\'amplada per defecte (830).';
+
 $string['footer_settings'] = 'Paràmetres del peu de pàgina';
 $string['footnote'] = 'Nota a peu de pàgina';
 $string['footnotedesc'] = 'Qualsevol cosa que escriviu en aquesta àrea de text es mostrarà al peu de pàgina al vostre lloc Moodle.';
