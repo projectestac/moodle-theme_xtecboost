@@ -178,22 +178,12 @@ nav.fixed-top.navbar {
 /* Blocks */
 
 .block {
-    border: 0;
-    padding-top: 0;
-    box-shadow: 0 0.375em 0.375em rgb(229, 229, 229);
     background: white;
 
-    .block-header,
-    .block-noheader {
-        background-color: $maincolor;
-        h5.card-title {
-            cursor: pointer;
-            color: $colorcontrast;
-        }
-        .block-controls,
-        .block-controls .dropdown-toggle {
-            color: $colorcontrast;
-        }
+    .card-title {
+        cursor: pointer;
+        color: $gray-800;
+        font-weight: bold;
     }
 
     .block-noheader {
@@ -247,14 +237,14 @@ nav.fixed-top.navbar {
 /* Page */
 
 #page {
-    background-color: $gray-100;
+    background-color: $white;
     margin-top: 0;
 }
 
 /* Footer */
 
 #page-footer-top {
-    background-color: $maincolor; /* Color */
+    background-color: $maincolor;
     color: $colorcontrast;
     padding: 1em;
     text-align: center;
