@@ -55,7 +55,7 @@ function theme_xtecboost_get_precompiled_css(): string {
  * @param theme_config $theme The theme config object.
  * @return array|string
  */
-function theme_xtecboost_get_pre_scss($theme): array|string {
+function theme_xtecboost_get_pre_scss($theme): string {
     $scss = '';
     $configurable = [
         // Config key => [variableName, ...].

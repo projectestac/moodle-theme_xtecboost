@@ -27,6 +27,13 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/behat/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 
+// Added compatibility for PHP 7.4.
+if (!function_exists('str_contains')) {
+    function str_contains($haystack, $needle): bool {
+        return $needle !== '' && mb_strpos($haystack, $needle) !== false;
+    }
+}
+
 global $CFG;
 
 // Add block button in editing mode.
