@@ -648,6 +648,10 @@ td {
     }
 }
 
+.drawer-toggles .drawer-toggler .btn {
+    background-color: $maincolor;
+}
+
 /* 1051-2020-0043 */
 body#page-admin-report-coursequotas-filemanager div#page.container-fluid section#region-main div#results table.generaltable {
     font-size: 0.8em;
