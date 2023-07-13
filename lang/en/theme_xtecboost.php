@@ -24,9 +24,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 // General.
-$string['pluginname'] = 'Xtec Boots';
+$string['pluginname'] = 'XTEC Boost';
 $string['choosereadme'] = '<p>Theme Boost is an enhanced child theme of Boost </p>';
-$string['configtitle'] = 'Xtec Boost';
+$string['configtitle'] = 'XTEC Boost';
 $string['generalsettings'] = 'General settings';
 
 $string['preset'] = 'Theme preset';

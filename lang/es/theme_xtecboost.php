@@ -25,7 +25,7 @@
 
 $string['choosereadme'] = 'Tema dissenyat pel servei Àgora-Moodle de la XTEC';
 
-$string['configtitle'] = 'xtecboost';
+$string['configtitle'] = 'XTEC Boost';
 
 $string['header_settings'] = 'Parámetros de la cabecera';
 $string['logo'] = 'Imagen de la cabecera';
