@@ -131,7 +131,7 @@ if ($ADMIN->fulltree) {
     $name = 'theme_xtecboost/coursecontentmaxwidth';
     $title = get_string('coursecontentmaxwidth', 'theme_xtecboost');
     $description = get_string('coursecontentmaxwidthdesc', 'theme_xtecboost');
-    $setting = new admin_setting_configtext($name, $title, $description, '830', PARAM_INT);
+    $setting = new admin_setting_configtext($name, $title, $description, '1000', PARAM_INT);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
