@@ -709,3 +709,7 @@ div#alexandria_restore div.tab-content #accordion .accordion-group .container-fl
     float: right;
     padding-bottom: 5px;
 }
+
+.activity-item:not(.activityinline) {
+    padding: 0.4rem;
+}
