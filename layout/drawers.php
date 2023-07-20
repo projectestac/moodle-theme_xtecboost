@@ -139,6 +139,8 @@ $templatecontext = [
     'logodepartamenteducacio' => $CFG->wwwroot . '/theme/xtecboost/pix/departament.png',
     'logocentre' => $logocentre,
     'showheader' => $showheader,
+    'footnote' => $PAGE->theme->settings->footnote,
+    'importcss' => $PAGE->theme->settings->importcss,
 ];
 
 echo $OUTPUT->render_from_template('theme_xtecboost/drawers', $templatecontext);
