@@ -70,11 +70,9 @@ h4 {
 #custom-header .image-wrapper {
     display: flex;
     justify-content: flex-end;
-    height: 100%;
 }
 
 #custom-header .image-wrapper img {
-    height: 100%;
     object-fit: cover;
 }
 
@@ -410,24 +408,6 @@ nav.fixed-top.navbar {
     z-index: 1000;
 }
 
-.availabilityinfoXTEC {
-    margin-left: 0;
-    margin-right: 0.2rem;
-}
-
-.availabilityinfoXTEC .badge {
-    min-width: 4rem;
-    text-align: center;
-    margin-left: 0.2rem;
-}
-
-a.dimmed + .availabilityinfoXTEC .badge-info {
-    background-color: #999;
-}
-.availabilityinfoXTEC .badge-info.isrestricted {
-    background-color: #999;
-}
-
 /* Login */
 #page-login-index {
     .card-header {
@@ -667,8 +647,7 @@ div#page.container-fluid section#region-main ul.nav-tabs li.active a {
     padding: 5px 10px;
 }
 
-.path-local-alexandriaimporter div#page.container-fluid section#region-main div#alexandria_restore
-.row {
+.path-local-alexandriaimporter div#page.container-fluid section#region-main div#alexandria_restore .row {
     padding: 1.0em;
 }
 
