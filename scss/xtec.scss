@@ -713,6 +713,37 @@ div#alexandria_restore div.tab-content #accordion .accordion-group .container-fl
     padding: 0.4rem;
 }
 
+/* Rounded corners */
+
+.coursebox {
+    border-radius: .7rem;
+}
+
+.sitetopic .section-item {
+    border-radius: .7rem;
+}
+
+.forumpost {
+    border-radius: .7rem;
+}
+
+.block {
+    border-radius: .7rem;
+}
+
+.card-grid  {
+    border-radius: .7rem;
+}
+
+.card-carousel,
+.course-card {
+    border-radius: .7rem;
+}
+
+.card-img-top {
+    border-radius: .7rem .7rem 0 0;
+}
+
 /* Fix for menu of report builder */
 #page-admin-reportbuilder-edit .fixed-top {
     position: unset!important;
