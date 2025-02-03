@@ -295,7 +295,13 @@ nav.fixed-top.navbar {
         }
 
         i.fa-twitter {
-            background-color: #55acee;
+            font-family: sans-serif;
+            background-color: #000000;
+        }
+
+        i.fa-twitter::before {
+            content: "𝕏";
+            font-size: 1.2em;
         }
 
         i.fa-pinterest {
