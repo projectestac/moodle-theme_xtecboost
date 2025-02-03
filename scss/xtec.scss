@@ -249,18 +249,24 @@ nav.fixed-top.navbar {
 
     .social-icons {
         text-align: right;
+
         img,
         i {
             text-align: center;
-            margin-left: 5px;
+            margin-left: 4px;
             margin-bottom: 3px;
-            height: 32px;
-            width: 32px;
+            height: 35px;
+            width: 35px;
             line-height: 32px;
             font-size: 20px;
             color: $white;
             vertical-align: middle;
             border-radius: 60px;
+        }
+
+        .icon {
+            max-width: 32px;
+            max-height: 32px;
         }
 
         i.fa-globe {
