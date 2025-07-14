@@ -17,18 +17,34 @@
 namespace theme_xtecboost\output;
 
 use cache;
+use context_system;
 use get_string;
+use moodle_url;
 use single_select;
 
 defined('MOODLE_INTERNAL') || die;
 
 class core_renderer extends \theme_boost\output\core_renderer {
 
-    public function favicon() {
+    /**
+     * @throws \moodle_exception
+     * @throws \dml_exception
+     */
+    public function favicon() : \moodle_url {
+
         global $CFG;
-        // TODO: Use theme/image.php instead of a direct path!
-        $type = theme_xtecboost_get_xtec_type('_');
-        return $CFG->wwwroot . '/theme/' . $this->page->theme->name . '/pix/favicon' . $type . '.ico';
+
+        $logo = get_config('core_admin', 'favicon');
+
+        if (empty($logo)) {
+            $type = theme_xtecboost_get_xtec_type('_');
+            return new \moodle_url($CFG->wwwroot . '/theme/' . $this->page->theme->name . '/pix/favicon' . $type . '.ico');
+        }
+
+        // Use $CFG->themerev to prevent browser caching when the file changes.
+        return moodle_url::make_pluginfile_url(context_system::instance()->id, 'core_admin', 'favicon', '64x64/',
+            theme_get_revision(), $logo);
+
     }
 
     public function social_icons() {
